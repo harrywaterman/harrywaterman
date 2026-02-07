@@ -1,9 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+
+const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+interface LayerInfo {
+  text: string;
+  href?: string;
+  action?: () => void;
+}
+
+const layers: LayerInfo[] = [
+  { text: 'resume', href: '/HW_Resume.pdf' },
+  { text: 'zine-a-thon', href: 'https://helenatran.com/humanexperiments/' },
+];
+
+// Approximate center-x for each parallelogram as percentage of container width
+const layerCenterPct = [14, 82];
 
 export default function Home() {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; text: string } | null>(null);
+  const [mobileTooltip, setMobileTooltip] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = useCallback((e: MouseEvent | TouchEvent) => {
+    if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      setMobileTooltip(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mobileTooltip !== null) {
+      document.addEventListener('touchstart', handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('touchstart', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [mobileTooltip, handleClickOutside]);
+
+  const handlePolygonClick = (index: number, e: React.MouseEvent) => {
+    if (isTouchDevice()) {
+      e.preventDefault();
+      setMobileTooltip(mobileTooltip === index ? null : index);
+    }
+  };
 
   return (
     <>
@@ -14,8 +56,12 @@ export default function Home() {
           style={{ width: '100%', height: 'auto' }}
         />
       </div>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ position: 'relative', display: 'inline-block', width: '25%' }}>
+      <div style={{ textAlign: 'center', overflow: 'visible', position: 'relative', zIndex: 5 }}>
+        <div
+          className="layers-container"
+          ref={containerRef}
+          style={{ position: 'relative', display: 'inline-block', width: '25%', overflow: 'visible' }}
+        >
           <img
             src="/layers.png"
             alt="Neural network layers"
@@ -40,8 +86,9 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="layer-link"
-              onMouseMove={(e) => setTooltip({ x: e.clientX, y: e.clientY, text: 'resume' })}
+              onMouseMove={(e) => { if (!isTouchDevice()) setTooltip({ x: e.clientX, y: e.clientY, text: 'resume' }); }}
               onMouseLeave={() => setTooltip(null)}
+              onClick={(e) => handlePolygonClick(0, e)}
             >
               <polygon points="42,57 160,16 156,284 37,325" />
             </a>
@@ -50,14 +97,43 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="layer-link"
-              onMouseMove={(e) => setTooltip({ x: e.clientX, y: e.clientY, text: 'zine-a-thon' })}
+              onMouseMove={(e) => { if (!isTouchDevice()) setTooltip({ x: e.clientX, y: e.clientY, text: 'zine-a-thon' }); }}
               onMouseLeave={() => setTooltip(null)}
+              onClick={(e) => handlePolygonClick(1, e)}
             >
               <polygon points="513,63 636,19 630,292 511,333" />
             </a>
           </svg>
+          {/* Mobile tooltip rendered as HTML above the image */}
+          {mobileTooltip !== null && (
+            <div
+              style={{
+                position: 'absolute',
+                top: -40,
+                left: `${layerCenterPct[mobileTooltip]}%`,
+                transform: 'translateX(-50%)',
+                fontSize: '20px',
+                whiteSpace: 'nowrap',
+                background: 'black',
+                color: 'white',
+                padding: '4px 10px',
+                borderRadius: '4px',
+                zIndex: 10,
+              }}
+            >
+              <a
+                href={layers[mobileTooltip].href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'white', textDecoration: 'underline' }}
+              >
+                {layers[mobileTooltip].text}
+              </a>
+            </div>
+          )}
         </div>
       </div>
+      {/* Desktop mouse-following tooltip */}
       {tooltip && (
         <div
           style={{
