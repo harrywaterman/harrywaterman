@@ -12,7 +12,7 @@ interface LayerInfo {
 
 const layers: LayerInfo[] = [
   { text: 'github', href: 'https://github.com/viceversa1024' },
-  { text: 'zine-a-thon', href: 'https://helenatran.com/humanexperiments/' },
+  { text: 'zine-a-thon', href: '/zine' },
 ];
 
 const layerCenterPct = [14, 82];
@@ -120,9 +120,7 @@ export default function HomeContent({ altBios }: HomeContentProps) {
               <polygon points="42,57 160,16 156,284 37,325" />
             </a>
             <a
-              href="https://helenatran.com/humanexperiments/"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/zine"
               className="layer-link"
               onMouseMove={(e) => { if (!isTouchDevice()) setTooltip({ x: e.clientX, y: e.clientY, text: 'zine-a-thon' }); }}
               onMouseLeave={() => setTooltip(null)}
