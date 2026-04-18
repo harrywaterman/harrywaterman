@@ -12,10 +12,11 @@ interface LayerInfo {
 
 const layers: LayerInfo[] = [
   { text: 'meet with me', href: 'https://calendar.app.google/RJz5GmyK3fpELsz66' },
+  { text: 'email (copy)' },
   { text: 'zine-a-thon', href: '/zine' },
 ];
 
-const layerCenterPct = [14, 82];
+const layerCenterPct = [14, 48, 82];
 
 interface AltBio {
   name: string;
@@ -29,8 +30,16 @@ interface HomeContentProps {
 export default function HomeContent({ altBios }: HomeContentProps) {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; text: string } | null>(null);
   const [mobileTooltip, setMobileTooltip] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
   const [universe, setUniverse] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(() => setCopied(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
 
   const handleClickOutside = useCallback((e: MouseEvent | TouchEvent) => {
     if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -53,6 +62,10 @@ export default function HomeContent({ altBios }: HomeContentProps) {
     if (isTouchDevice()) {
       e.preventDefault();
       setMobileTooltip(mobileTooltip === index ? null : index);
+    } else if (index === 1) {
+      e.preventDefault();
+      navigator.clipboard.writeText('watermah@uci.edu');
+      setCopied(true);
     }
   };
 
@@ -120,11 +133,19 @@ export default function HomeContent({ altBios }: HomeContentProps) {
               <polygon points="42,57 160,16 156,284 37,325" />
             </a>
             <a
+              className="layer-link"
+              onMouseMove={(e) => { if (!isTouchDevice()) setTooltip({ x: e.clientX, y: e.clientY, text: 'email (copy)' }); }}
+              onMouseLeave={() => setTooltip(null)}
+              onClick={(e) => handlePolygonClick(1, e)}
+            >
+              <polygon points="279,63 401,17 396,288 275,328" />
+            </a>
+            <a
               href="/zine"
               className="layer-link"
               onMouseMove={(e) => { if (!isTouchDevice()) setTooltip({ x: e.clientX, y: e.clientY, text: 'zine-a-thon' }); }}
               onMouseLeave={() => setTooltip(null)}
-              onClick={(e) => handlePolygonClick(1, e)}
+              onClick={(e) => handlePolygonClick(2, e)}
             >
               <polygon points="513,63 636,19 630,292 511,333" />
             </a>
@@ -145,14 +166,26 @@ export default function HomeContent({ altBios }: HomeContentProps) {
                 zIndex: 10,
               }}
             >
-              <a
-                href={layers[mobileTooltip].href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'white', textDecoration: 'underline' }}
-              >
-                {layers[mobileTooltip].text}
-              </a>
+              {layers[mobileTooltip].href ? (
+                <a
+                  href={layers[mobileTooltip].href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: 'white', textDecoration: 'underline' }}
+                >
+                  {layers[mobileTooltip].text}
+                </a>
+              ) : (
+                <span
+                  style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => {
+                    navigator.clipboard.writeText('watermah@uci.edu');
+                    setCopied(true);
+                  }}
+                >
+                  {layers[mobileTooltip].text}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -175,6 +208,24 @@ export default function HomeContent({ altBios }: HomeContentProps) {
           {tooltip.text}
         </div>
       )}
+      {copied && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 130,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'black',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            fontSize: '14px',
+            zIndex: 1000,
+          }}
+        >
+          email copied to clipboard
+        </div>
+      )}
       {universe === null ? (
         <>
           <p>Hello, I&apos;m Harry.</p>
@@ -188,9 +239,12 @@ export default function HomeContent({ altBios }: HomeContentProps) {
           ))}
         </>
       )}
-      <button className="universe-toggle" onClick={handleUniverseToggle}>
-        {buttonLabel}
-      </button>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '1em 0', width: '100%' }}>
+        <p style={{ margin: 0 }}>watermah at uci dot edu</p>
+        <button className="universe-toggle" onClick={handleUniverseToggle} style={{ marginTop: 0 }}>
+          {buttonLabel}
+        </button>
+      </div>
     </>
   );
 }
