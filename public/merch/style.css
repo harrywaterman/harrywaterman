@@ -4,7 +4,7 @@
     h1 { margin: 0 0 24px; font: normal clamp(1.75rem, 4vw, 2.5rem)/1.2 Georgia, serif; }
     .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 28px; }
     figure { margin: 0; min-width: 0; }
-    figure a { display: block; }
+    figure > a { display: block; }
     a:focus-visible { outline: 2px solid #163e68; outline-offset: 6px; }
     img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; }
     figcaption { margin-top: 12px; font-size: .875rem; }
@@ -21,3 +21,5 @@
     nav .submit { margin-left: auto; color: #202020; font-size: .875rem; }
     .empty { color: #666; padding: 24px 0; }
     .empty a { color: #202020; text-underline-offset: 3px; }
+    figcaption a { color: inherit; text-decoration: underline; text-decoration-color: #aaa; text-underline-offset: 3px; }
+    figcaption a:hover { text-decoration-color: currentColor; }
