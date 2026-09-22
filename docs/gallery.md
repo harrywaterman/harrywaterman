@@ -14,7 +14,7 @@ The order of the figure blocks is the display order. Clicking a photo opens the 
 
 ## Add a flyer
 
-Replace the empty-state paragraph in `public/gallery/flyers/index.html` with a `<div class="gallery">` containing figure blocks like the Merch page. Use image paths beginning with `/gallery/images/` so they resolve from either tab. For portrait flyers, override `aspect-ratio` on the image (for example `style="aspect-ratio: 2 / 3"`); keep `object-fit: contain` so nothing is cropped.
+Copy a figure block in `public/gallery/flyers/index.html` to add another flyer. Use image paths beginning with `/gallery/images/` so they resolve from either tab. The Flyers grid preserves each image’s natural aspect ratio so nothing is cropped. Keep captions to the official club name, linked to its website.
 
 Edit `public/gallery/style.css` to change the appearance of both tabs. If the submission form changes, update its links on both pages.
 
