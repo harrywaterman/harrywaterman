@@ -22,3 +22,6 @@
     .empty a { color: #202020; text-underline-offset: 3px; }
     figcaption a { color: inherit; text-decoration: none; }
     .flyers img { aspect-ratio: auto; }
+    .flyers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 900px) { .flyers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .flyers { grid-template-columns: 1fr; } }
