@@ -2,7 +2,7 @@
 
 The standalone gallery is `public/gallery/index.html`, published at `/gallery/`, with a Flyers tab at `/gallery/flyers/`. It is deliberately not linked from the main site. It uses plain HTML and one shared stylesheet, with no JavaScript, external fonts, or runtime dependencies. The tabs are ordinary links and work without JavaScript.
 
-“Submit yours” opens an email to `harrywatermanb@gmail.com`, the contact address on the homepage, with fields for group name, category, and optional credits. Visitors attach their images manually. Submissions arrive in email and are not published automatically. This requires a configured email app; there is no upload service or database.
+“Submit yours” and “Send one in” link to the Google Form at https://forms.gle/c2aXo5JbRZ6fJLfu7. Submissions are collected through the form and are not published automatically.
 
 ## Add a photo
 
@@ -16,6 +16,6 @@ The order of the figure blocks is the display order. Clicking a photo opens the 
 
 Replace the empty-state paragraph in `public/gallery/flyers/index.html` with a `<div class="gallery">` containing figure blocks like the Merch page. Use image paths beginning with `/gallery/images/` so they resolve from either tab. For portrait flyers, override `aspect-ratio` on the image (for example `style="aspect-ratio: 2 / 3"`); keep `object-fit: contain` so nothing is cropped.
 
-Edit `public/gallery/style.css` to change the appearance of both tabs. If the submission address changes, update the mail links on both pages.
+Edit `public/gallery/style.css` to change the appearance of both tabs. If the submission form changes, update its links on both pages.
 
 The previous `/merch/` and `/merch/flyers/` addresses redirect to their new `/gallery/` equivalents.
