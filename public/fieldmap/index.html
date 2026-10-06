@@ -12,6 +12,11 @@
   h1 { font-size: 20px; font-weight: 600; color: #e8eaed; margin-bottom: 4px; }
   .subtitle { color: #7a8088; font-size: 13px; margin-bottom: 24px; }
 
+  .update-banner { margin-bottom: 24px; padding: 14px 18px; border: 1px solid #315778; border-radius: 8px; background: #142333; color: #e8eaed; font-size: 14px; }
+  .update-banner a { color: #9fcfff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .update-banner a:hover { color: #fff; }
+  .update-banner a:focus-visible { outline: 2px solid #9fcfff; outline-offset: 4px; border-radius: 2px; }
+
   /* Summary cards */
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
   .card { background: #14151a; border: 1px solid #23252b; border-radius: 8px; padding: 14px 16px; }
@@ -206,6 +211,9 @@
 </head>
 <body>
 <div class="container">
+  <aside class="update-banner" aria-label="Updated information">
+    For more up-to-date information on the AI safety field, visit <a href="https://trace.manifund.org/">Trace</a>.
+  </aside>
   <h1>AI Safety Field Map</h1>
   <details class="scope-details">
     <summary>Scope definition</summary>
