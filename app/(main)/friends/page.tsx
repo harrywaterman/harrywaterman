@@ -16,6 +16,14 @@ export default function Friends() {
     };
   }, []);
 
+  // Attach the stream once the <video> has rendered. Doing this from the click
+  // handler raced the render and sometimes left the box blank.
+  useEffect(() => {
+    if (showCam && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+    }
+  }, [showCam]);
+
   const handleYouClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (showCam) return;
@@ -23,11 +31,6 @@ export default function Friends() {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       streamRef.current = stream;
       setShowCam(true);
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      });
     } catch {
       // permission denied or no camera
     }
