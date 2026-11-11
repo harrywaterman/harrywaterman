@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Bay Area, 1769 to 2076</title>
+    <meta name="description" content="Theo Jaffee's Bay Area Through Time, with an imagined future added: forty million people by 2076." />
+    <style>
+      html, body { margin: 0; height: 100%; background: #ece6d6; }
+      iframe { display: block; width: 100%; height: 100%; border: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- The map is published from github.com/harrywaterman/bay: at about 400 MB it is too large
+         to keep in this repository, whose deploys the congress tracker depends on. This page
+         shows it full-window and keeps the address in step with the view, so links can be shared. -->
+    <iframe id="map" title="The Bay Area, 1769 to 2076" allow="fullscreen" allowfullscreen></iframe>
+    <noscript><a href="https://harrywaterman.github.io/bay/">The Bay Area, 1769 to 2076</a></noscript>
+    <script>
+      var MAP = 'https://harrywaterman.github.io/bay/';
+      document.getElementById('map').src = MAP + location.search + location.hash;
+      window.addEventListener('message', function (e) {
+        if (e.origin !== 'https://harrywaterman.github.io' || !e.data || typeof e.data.bayHash !== 'string') return;
+        history.replaceState(null, '', location.pathname + location.search + e.data.bayHash);
+      });
+    </script>
+  </body>
+</html>
